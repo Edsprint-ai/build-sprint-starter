@@ -40,6 +40,10 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+
+      # First, because a leaked key matters more than a type error.
+      - run: pnpm check:secrets
+
       - run: pnpm typecheck
       - run: pnpm test
 

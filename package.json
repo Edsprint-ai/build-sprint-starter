@@ -20,7 +20,8 @@
     "format": "prettier --write .",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
-    "preflight": "node scripts/doctor.mjs && pnpm typecheck && pnpm test"
+    "preflight": "node scripts/check-secrets.mjs && node scripts/doctor.mjs && pnpm typecheck && pnpm test",
+    "check:secrets": "node scripts/check-secrets.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.0",

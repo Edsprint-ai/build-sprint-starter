@@ -25,6 +25,27 @@ So:
 - If you find something in a fixture that looks like it should not be public,
   tell us. Do not investigate it yourself.
 
+## This repository is public
+
+Your squad repo is public from day one. That is deliberate: it is the portfolio
+you leave with, and public work history is worth more to you than a private
+repo nobody can see. It also means everything below is not advice, it is a rule.
+
+**Never commit:**
+
+- **Your employer's code, or anything under an NDA.** If you have a job, none
+  of it comes in here. Not a snippet, not a config, not "just as an example".
+  This is the one that ends careers, and it is entirely avoidable.
+- **Real personal data.** Fixture records stay in the fixture. See above.
+- **Credentials of any kind.** `pnpm check:secrets` runs on every pull request
+  and fails the build if it finds one, but do not rely on it catching
+  everything.
+- **Anything you would not want a future employer to read.** They will. That is
+  the point of a public portfolio, and it cuts both ways.
+
+Push protection is on for this repository, so GitHub will block a push that
+contains a recognised secret. Treat that as a last line, not a first one.
+
 ## What never goes into a prompt
 
 This is universal practice, not a programme rule, and it will follow you into

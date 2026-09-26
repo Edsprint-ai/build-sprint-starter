@@ -10,3 +10,17 @@ dist/
 
 # Downloaded fixtures are never committed. The script fetches them.
 data/
+
+# Belt and braces for a PUBLIC repo. scripts/check-secrets.mjs fails the build
+# if any of these ever get past this list.
+.env*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+secrets.*
+credentials.*
+.claude/settings.local.json
