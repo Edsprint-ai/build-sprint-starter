@@ -7,12 +7,19 @@
  * and without a marker the only way to notice drift is to diff by hand, which
  * nobody does.
  *
- * STARTER_VERSION records the starter commit this repo was last synced to.
+ * STARTER_VERSION records the starter commit this repo was last synced to. It
+ * is written during the sync, not committed in the starter, because a file
+ * cannot contain the hash of the commit that contains it.
  */
 import { readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 
 const local = readFileSync('STARTER_VERSION', 'utf8').trim();
+
+if (local === 'this-is-the-starter') {
+  console.log('  This IS the starter repo, so there is nothing to compare.\n');
+  process.exit(0);
+}
 console.log(`  this repo was synced to starter commit  ${local}`);
 
 try {
