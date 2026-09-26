@@ -1,0 +1,54 @@
+# The one automated check. Nobody configures this, and it is not a CI course.
+# It exists so that "a clean clone runs" is a fact rather than a claim, and so
+# that nobody discovers in week 7 that main has been broken since week 4.
+#
+# Note it runs with NO ANTHROPIC_API_KEY. Stage 3 must work without one, and
+# stage 4 is exercised from the recorded response cache. If CI goes red because
+# a key is missing, the bug is in your code, not in this file.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: sprint
+          POSTGRES_PASSWORD: sprint
+          POSTGRES_DB: sprint
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U sprint"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+
+    env:
+      DATABASE_URL: postgres://sprint:sprint@localhost:5432/sprint
+      AI_MODE: cache
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      # The integration check: a clean clone must actually serve a page.
+      - name: Server starts and answers
+        run: |
+          pnpm start &
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:3000/api/health && break
+            sleep 1
+          done
+          curl -fsS http://localhost:3000/api/health | tee /dev/stderr | grep -q '"ok":true'

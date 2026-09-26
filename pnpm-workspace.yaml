@@ -1,0 +1,5 @@
+# pnpm 11 asks before letting a dependency run install scripts. esbuild needs
+# to, or vitest cannot run. Approving it here means nobody has to answer an
+# interactive prompt during setup, which would otherwise hang CI.
+allowBuilds:
+  esbuild: true

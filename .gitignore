@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+
+# Recorded model responses. Committed on purpose: see docs/WORKING-WITH-CLAUDE.md.
+# Delete a file here to force that one call to go live again.
+!.cache/ai/
+
+# Downloaded fixtures are never committed. The script fetches them.
+data/
