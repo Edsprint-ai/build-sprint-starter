@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  binaryScore, coverage, groupingF1, matchEpisode, purity, scoreTopK,
+  assignOneToOne, binaryScore, coverage, groupingF1, matchEpisode, purity, scoreTopK,
   type Episode, type ScoredFinding,
 } from '../src/scoring/metrics.js';
 
@@ -110,5 +110,34 @@ describe('binaryScore', () => {
     expect(s.recall).toBeCloseTo(0.8);
     expect(s.precision).toBeCloseTo(4 / 14);
     expect(s.falsePositiveRate).toBeCloseTo(10 / 35);
+  });
+});
+
+describe('assignOneToOne', () => {
+  it('does not let two findings claim the same episode', () => {
+    // Without a real assignment, both findings match e1: the episode gets
+    // counted once for recall but twice for precision, and which finding
+    // "wins" depends on array order. Order-dependent scoring is invisible and
+    // therefore the worst kind of wrong.
+    const e1 = ep('e1', 10);
+    const e2 = ep('e2', 10, 500);
+    const a: ScoredFinding = { rank: 1, coveredIds: e1.memberIds };
+    const b: ScoredFinding = { rank: 2, coveredIds: e1.memberIds };
+
+    const assigned = assignOneToOne([a, b], [e1, e2]);
+    expect(assigned.size).toBe(1);
+
+    const s = scoreTopK([a, b], [e1, e2]);
+    expect(s.recall).toBe(0.5);       // one of two episodes found
+    expect(s.precision).toBe(0.5);    // one of two findings was useful
+  });
+
+  it('gives each episode to the finding that overlaps it most', () => {
+    const e1 = ep('e1', 10);
+    const partial: ScoredFinding = { rank: 1, coveredIds: e1.memberIds.slice(0, 6) };
+    const full: ScoredFinding = { rank: 2, coveredIds: e1.memberIds };
+    const assigned = assignOneToOne([partial, full], [e1]);
+    expect(assigned.get(full)?.id).toBe('e1');
+    expect(assigned.has(partial)).toBe(false);
   });
 });

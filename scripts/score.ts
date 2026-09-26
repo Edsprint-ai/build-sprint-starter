@@ -17,6 +17,14 @@ interface Fixture {
   episodes: Episode[];
   /** recordId -> true template id, for grouping quality. */
   templates?: Record<string, string>;
+  /**
+   * The frozen pass marks, shipped WITH the fixture.
+   *
+   * Students see the number they have to hit. Hiding the formula would be
+   * defensible; hiding the required result is not, because then "done" is
+   * something only the instructor can check.
+   */
+  thresholds: { recallAt5: number; precisionAt5: number; groupingF1?: number };
 }
 
 const FIXTURE = process.env.FIXTURE ?? 'fixtures/visible.json';
@@ -40,23 +48,43 @@ async function main() {
 
   const top = scoreTopK(findings, fixture.episodes, 5);
 
-  console.log(`\n  fixture   ${fixture.version}`);
-  console.log(`  checksum  ${checksum}`);
-  console.log(`  episodes  ${fixture.episodes.length}`);
-  console.log('');
-  console.log(`  recall@5     ${top.recall.toFixed(3)}`);
-  console.log(`  precision@5  ${top.precision.toFixed(3)}`);
+  const rows: { name: string; got: number; need: number | undefined }[] = [
+    { name: 'recall@5', got: top.recall, need: fixture.thresholds.recallAt5 },
+    { name: 'precision@5', got: top.precision, need: fixture.thresholds.precisionAt5 },
+  ];
 
   if (fixture.templates) {
     const truth = new Map(Object.entries(fixture.templates));
-    const g = groupingF1(assigned, truth);
-    console.log(`  grouping F1  ${g.f1.toFixed(3)}   (p ${g.precision.toFixed(3)} r ${g.recall.toFixed(3)})`);
+    rows.push({ name: 'grouping F1', got: groupingF1(assigned, truth).f1, need: fixture.thresholds.groupingF1 });
   }
 
+  console.log(`\n  fixture   ${fixture.version}`);
+  console.log(`  sha256    ${checksum}`);
+  console.log(`  episodes  ${fixture.episodes.length}`);
+  console.log('');
+  console.log('  measure         your score   needed   ');
+  console.log('  ' + '-'.repeat(44));
+
+  let allPass = true;
+  for (const r of rows) {
+    const need = r.need;
+    const pass = need === undefined ? true : r.got >= need;
+    if (!pass) allPass = false;
+    const verdict = need === undefined ? '' : pass ? 'PASS' : 'NOT YET';
+    console.log(
+      `  ${r.name.padEnd(16)}${r.got.toFixed(3).padStart(10)}` +
+        `${(need === undefined ? '-' : need.toFixed(3)).padStart(9)}   ${verdict}`,
+    );
+  }
+
+  console.log('');
+  console.log(`  ${allPass ? 'PASS' : 'NOT YET'} against the frozen thresholds for this fixture.`);
   console.log('');
   if (findings.length === 0) {
     console.log('  Zero because stage 3 returns nothing yet. That is src/stages/3-detect/.\n');
   }
+  // Exit non-zero when short, so this can gate anything later without a rewrite.
+  if (!allPass) process.exitCode = 1;
 }
 
 main();

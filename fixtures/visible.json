@@ -1,0 +1,9 @@
+{
+  "version": "example-0.0.1-not-a-real-fixture",
+  "thresholds": { "recallAt5": 0.7, "precisionAt5": 0.6, "groupingF1": 0.8 },
+  "episodes": [
+    { "id": "e1", "memberIds": ["L10", "L11", "L12", "L13"] },
+    { "id": "e2", "memberIds": ["L80", "L81", "L82"] }
+  ],
+  "templates": { "L10": "t1", "L11": "t1", "L12": "t1", "L13": "t1", "L80": "t2", "L81": "t2", "L82": "t2" }
+}

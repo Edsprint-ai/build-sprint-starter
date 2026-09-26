@@ -40,9 +40,8 @@ export const MIN_COVERAGE = 0.5;
 export const MIN_PURITY = 0.3;
 
 /**
- * A finding matches at most one episode: the highest-overlap one that clears
- * both bars. Purity is what stops one enormous finding containing most of the
- * file from matching every episode at once.
+ * The best episode for one finding, ignoring what other findings want. Used by
+ * the assignment below and exported because it is the readable unit to test.
  */
 export function matchEpisode(finding: ScoredFinding, episodes: Episode[]): Episode | null {
   let best: Episode | null = null;
@@ -59,6 +58,44 @@ export function matchEpisode(finding: ScoredFinding, episodes: Episode[]): Episo
   return best;
 }
 
+/**
+ * True one-to-one assignment between findings and episodes.
+ *
+ * "Each finding takes its favourite episode" is not enough: two findings can
+ * both claim the same episode, which either double counts it or silently drops
+ * the second finding depending on the order they happen to be in. Both are
+ * wrong, and order-dependent scoring is the worst kind of wrong because it is
+ * invisible.
+ *
+ * Greedy on descending overlap is exact for the sizes here (at most five
+ * findings) and is easy to read, which matters more than optimality in a
+ * scorer people have to trust.
+ */
+export function assignOneToOne(
+  findings: ScoredFinding[],
+  episodes: Episode[],
+): Map<ScoredFinding, Episode> {
+  const candidates: { f: ScoredFinding; e: Episode; overlap: number }[] = [];
+  for (const f of findings) {
+    for (const e of episodes) {
+      const c = coverage(f, e);
+      const p = purity(f, e);
+      if (c < MIN_COVERAGE || p < MIN_PURITY) continue;
+      candidates.push({ f, e, overlap: c });
+    }
+  }
+  candidates.sort((a, b) => b.overlap - a.overlap);
+
+  const assigned = new Map<ScoredFinding, Episode>();
+  const takenEpisodes = new Set<string>();
+  for (const { f, e } of candidates) {
+    if (assigned.has(f) || takenEpisodes.has(e.id)) continue;
+    assigned.set(f, e);
+    takenEpisodes.add(e.id);
+  }
+  return assigned;
+}
+
 export interface TopKScore {
   recall: number;
   precision: number;
@@ -67,16 +104,9 @@ export interface TopKScore {
 
 export function scoreTopK(findings: ScoredFinding[], episodes: Episode[], k = 5): TopKScore {
   const top = [...findings].sort((a, b) => a.rank - b.rank).slice(0, k);
-  const matchedEpisodes = new Set<string>();
-  let findingsThatMatch = 0;
-
-  for (const f of top) {
-    const ep = matchEpisode(f, episodes);
-    if (ep) {
-      findingsThatMatch += 1;
-      matchedEpisodes.add(ep.id);
-    }
-  }
+  const assigned = assignOneToOne(top, episodes);
+  const matchedEpisodes = new Set([...assigned.values()].map((e) => e.id));
+  const findingsThatMatch = assigned.size;
 
   return {
     recall: episodes.length === 0 ? 0 : matchedEpisodes.size / episodes.length,
