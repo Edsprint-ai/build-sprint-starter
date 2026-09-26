@@ -21,7 +21,8 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
     "preflight": "node scripts/check-secrets.mjs && node scripts/doctor.mjs && pnpm typecheck && pnpm test",
-    "check:secrets": "node scripts/check-secrets.mjs"
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "starter:version": "node scripts/starter-version.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.0",
