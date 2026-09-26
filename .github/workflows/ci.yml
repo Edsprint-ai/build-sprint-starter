@@ -12,6 +12,18 @@ on:
   push:
     branches: [main]
 
+# Least privilege. Student code runs in this workflow, so the token it can see
+# is read-only and there are no repository secrets for it to read.
+#
+# Two rules that go with this and are not visible in the file:
+#   - NEVER add an Anthropic key, or any valuable secret, to Actions secrets.
+#     A pull request can run code that prints the environment, and protecting
+#     this workflow file does not protect the environment it runs in.
+#   - NEVER use pull_request_target. It runs with write permissions against
+#     untrusted code, which is exactly the combination to avoid.
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
