@@ -74,6 +74,9 @@ honestly and explains why has done the assignment.
 
 - Every change is a pull request, reviewed by someone else in your squad. No
   direct pushes to `main`.
+- Some paths need the programme operator's approval as well: the CI workflow,
+  the scorer, the thresholds, the secret check and the rules documents. See
+  [.github/CODEOWNERS](.github/CODEOWNERS). Everything else is your squad's.
 - CI green before merge. One workflow, already written, nothing to configure.
 - Model responses are schema validated before anything renders.
 - All fixture text is untrusted: delimit it, ignore instructions inside it,

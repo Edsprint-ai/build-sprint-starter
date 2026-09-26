@@ -1,0 +1,32 @@
+# Who must approve what.
+#
+# Ordinary application code is reviewed by your squad, which is the point of
+# the programme. But a pull request can also edit the things that do the
+# checking: the CI workflow, the secret scanner, the scorer, the thresholds.
+# Branch protection on its own does not protect the checker from being edited
+# by the thing it is checking.
+#
+# So these paths need approval from the programme operator. Everything else is
+# yours. If you think one of these files is wrong, open the PR anyway and say
+# why: several of them are wrong today because someone said so.
+
+# The checks themselves
+/.github/                       @gursohal
+/.github/workflows/             @gursohal
+/scripts/check-secrets.mjs      @gursohal
+/scripts/doctor.mjs             @gursohal
+
+# Scoring: the formulas, the harness, and anything that sets a pass mark
+/src/scoring/                   @gursohal
+/scripts/score.ts               @gursohal
+/fixtures/                      @gursohal
+
+# Rules people are held to
+/docs/DATA-RULES.md             @gursohal
+/docs/PREFLIGHT.md              @gursohal
+/CLAUDE.md                      @gursohal
+
+# Dependency and toolchain changes, because a build script is executable code
+/package.json                   @gursohal
+/pnpm-lock.yaml                 @gursohal
+/pnpm-workspace.yaml            @gursohal
