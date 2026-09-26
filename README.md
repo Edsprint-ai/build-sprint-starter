@@ -24,6 +24,7 @@ route and a macOS route, and a devcontainer route that avoids both.
 |---|---|
 | [docs/SETUP.md](docs/SETUP.md) | Getting your machine working, Windows and macOS |
 | [docs/CLAUDE-SETUP.md](docs/CLAUDE-SETUP.md) | The subscription and the API key, which are **two different things** |
+| **[docs/DATA-RULES.md](docs/DATA-RULES.md)** | **Your fixture is other people's lives. Read before touching data** |
 | [docs/PREFLIGHT.md](docs/PREFLIGHT.md) | The task due 1 October |
 | [docs/WORKING-WITH-CLAUDE.md](docs/WORKING-WITH-CLAUDE.md) | Where it helps, and where using it costs you the thing you came for |
 | [CLAUDE.md](CLAUDE.md) | Project rules, read automatically by Claude Code |

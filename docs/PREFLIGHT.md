@@ -7,6 +7,9 @@ that the setup was never going to work on your machine.
 
 You get one round of help. Ask early.
 
+Read **[DATA-RULES.md](DATA-RULES.md)** first. It is four minutes and it is
+the one document with consequences outside this programme.
+
 ## What to do
 
 1. Follow `docs/SETUP.md` and get `pnpm doctor` green.

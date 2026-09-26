@@ -29,6 +29,9 @@ Six stages, in `src/stages/`. Each has one job:
 - **Findings carry both `coveredIds` and `evidenceIds`.** The scorer reads
   covered, the screen shows evidence. Do not conflate them.
 - **Every change is a pull request.** No direct pushes to main.
+- **Never suggest pasting fixture records, credentials or `.env` contents into a
+  prompt, an issue, a commit message or a chat.** Fixtures contain real people's
+  data. Sanitise with placeholders. See `docs/DATA-RULES.md`.
 
 ## Commands
 
