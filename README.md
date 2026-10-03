@@ -25,7 +25,9 @@ route and a macOS route, and a devcontainer route that avoids both.
 | [docs/SETUP.md](docs/SETUP.md) | Getting your machine working, Windows and macOS |
 | [docs/CLAUDE-SETUP.md](docs/CLAUDE-SETUP.md) | The subscription and the API key, which are **two different things** |
 | **[docs/DATA-RULES.md](docs/DATA-RULES.md)** | **Your fixture is other people's lives. Read before touching data** |
-| [docs/PREFLIGHT.md](docs/PREFLIGHT.md) | The task due 1 October |
+| **[briefs/STUDENT-BRIEF.md](briefs/STUDENT-BRIEF.md)** | **What you are building. Start here** |
+| [docs/PREFLIGHT.md](docs/PREFLIGHT.md) | Your first task, due Sunday 4 October, 11:59 PM IST |
+| [docs/EVALUATION-CONTRACT.md](docs/EVALUATION-CONTRACT.md) | How your project is run and scored |
 | [docs/WORKING-WITH-CLAUDE.md](docs/WORKING-WITH-CLAUDE.md) | Where it helps, and where using it costs you the thing you came for |
 | [CLAUDE.md](CLAUDE.md) | Project rules, read automatically by Claude Code |
 | [THIRD_PARTY.md](THIRD_PARTY.md) | Licences. Fill in during week 1 |
@@ -56,7 +58,8 @@ it work. If your demo dies because a key expired, stage 3 was wrong.
 | `pnpm dev` | Server with reload |
 | `pnpm test` | Unit tests |
 | `pnpm typecheck` | TypeScript, no emit |
-| `pnpm score` | Score against the visible fixture |
+| `pnpm analyse --input fixtures/log-analyser/visible.log --out out/findings.json` | Run your pipeline on the practice log |
+| `pnpm score` | Score that output against the practice answers |
 | `pnpm preflight` | doctor + typecheck + test. What CI runs |
 
 ## How you are scored

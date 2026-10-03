@@ -40,7 +40,8 @@ pnpm doctor      # diagnose the environment, prints the fix for each failure
 pnpm dev         # server with reload
 pnpm typecheck   # tsc --noEmit
 pnpm test        # vitest
-pnpm score       # score against the visible fixture
+pnpm analyse --input fixtures/log-analyser/visible.log --out out/findings.json
+pnpm score       # score out/findings.json against the practice answers
 pnpm preflight   # doctor + typecheck + test, what CI runs
 ```
 

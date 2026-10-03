@@ -1,8 +1,8 @@
 # Setup
 
 Target: **`pnpm doctor` prints all green** and `pnpm dev` serves a page.
-Budget about 45 minutes the first time. If you are stuck for more than 20
-minutes on any one step, ask. That is what week 1 is for.
+If you are stuck for more than 20 minutes on any one step, ask. That is what
+week 1 is for.
 
 Two routes. Pick one.
 

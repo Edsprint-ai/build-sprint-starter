@@ -1,60 +1,66 @@
 # Preflight task
 
-**Due Thursday 1 October.** Under an hour. It is not a test you can fail into
-rejection: if you cannot finish it, you get a **full refund before the
-programme starts**, which is much better for you than discovering in week 3
-that the setup was never going to work on your machine.
+**Due: Sunday 4 October, 11:59 PM IST.** The programme starts Monday 5 October.
 
-You get one round of help. Ask early.
+This is a small first task. It checks that you can reach the project and work
+in it, so week 1 can be about building instead of setup.
 
-Read **[DATA-RULES.md](DATA-RULES.md)** first. It is four minutes and it is
-the one document with consequences outside this programme.
+Before you start, read **[DATA-RULES.md](DATA-RULES.md)**. It is short.
 
-**There are two versions. Do the one for your track.** The product track needs
-no code, no local environment and no Docker, because none of that is part of
-the product role.
+There are two versions. **Do the one for your role.**
 
 ---
 
-## If you applied for the product track
+## Product manager
 
-Nothing to install. You need a browser and a GitHub account.
+You do not need to install anything. You only need a web browser and your
+GitHub account.
 
-1. Accept the repository invite we send you.
-2. Open `briefs/problem-brief.md` in GitHub and click the pencil to edit it.
-3. Fill in the three blanks: **the user**, **the one question** they need
-   answered, and **one thing that is out of scope**. Three sentences is plenty.
-4. Commit to a new branch and open a pull request.
-5. Find the pull request we opened called **Preflight: review me**, and leave
-   one comment on a specific line saying what you would change and why.
+1. Accept the GitHub invite to your squad repository.
+2. Open `briefs/problem-brief.md` on GitHub and click the pencil icon to edit it.
+3. Fill in the three sections:
+   - **The user**: who has this problem
+   - **The one question**: what they need answered
+   - **One thing out of scope**: something the tool will not do, and why
+4. Choose **Create a new branch** and then **Propose changes**. This opens a
+   pull request.
+5. When an engineer in your squad opens their preflight pull request, leave
+   **one comment on a specific line**: what you would change and why.
 
-That is the whole task. It proves you can work through GitHub, which is where
-the whole programme runs, without pretending you need to be an engineer.
+## Engineer
 
-## If you applied for the engineering track
+1. Accept the GitHub invite to your squad repository.
+2. Follow **[SETUP.md](SETUP.md)** to set up your computer.
+3. Run `pnpm doctor`. It checks your setup and tells you how to fix anything
+   that is wrong.
+4. Make a new branch:
 
-1. Follow `docs/SETUP.md` and get `pnpm doctor` green.
-2. Clone this repo, create a branch: `git checkout -b preflight/your-name`
-3. Add one file: `preflight/your-name.md`, containing
-   - your name, your track and your operating system
-   - the output of `pnpm doctor`
-   - one sentence on anything that was confusing
-4. Commit and push. Open a pull request.
-5. Check that the **CI check goes green** on your PR.
+   ```
+   git checkout -b preflight/your-name
+   ```
 
-That last step is the real content. If CI is green, your machine can build and
-run the project, and week 1 can be about the project instead of installation.
+5. Add a file called `preflight/your-name.md` with:
+   - your name
+   - your operating system (Windows, macOS or Linux)
+   - whether `pnpm doctor` passed
+   - one sentence about anything that was unclear
 
-## What each one proves
+   Do **not** paste the full `pnpm doctor` output. It can include folder paths
+   from your computer, and this repository is public.
 
-| Step | What it tells us |
-|---|---|
-| Repo invite accepted | You can reach the work |
-| Edit and open a PR | You can use the workflow the programme runs on |
-| Review comment | You can give feedback on a specific line, which is most of week 3 onward |
-| doctor green *(engineering)* | Node, pnpm, Docker, Postgres and your `.env` are right |
-| CI green *(engineering)* | A clean clone of your work actually builds and runs |
+6. Commit, push, and open a pull request.
+7. Wait for the **green check mark** on your pull request. That means a clean
+   copy of the project builds and its tests pass.
+8. Review the other engineer's preflight pull request and leave a comment.
 
-Attribution matters beyond this task: your certificate depends on your
-contributions being identifiably yours, which depends on `git config user.name`
-and `user.email` being right. The doctor checks it.
+## Stuck?
+
+If you are stuck for more than 20 minutes, reply to the welcome email. Tell us
+which step you are on and the error you see. Do not spend hours debugging setup
+alone.
+
+## Your name on your work
+
+Your certificate depends on your work being clearly yours. That depends on
+`git config user.name` and `git config user.email` being set correctly.
+`pnpm doctor` checks this for you.

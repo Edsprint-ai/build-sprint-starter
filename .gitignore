@@ -3,6 +3,8 @@ dist/
 .env
 .env.local
 *.log
+# ...except the practice log your project analyses. It is the input, not a log.
+!fixtures/**/*.log
 
 # Recorded model responses. Committed on purpose: see docs/WORKING-WITH-CLAUDE.md.
 # Delete a file here to force that one call to go live again.
