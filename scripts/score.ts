@@ -27,12 +27,23 @@ interface Fixture {
   thresholds: { recallAt5: number; precisionAt5: number; groupingF1?: number };
 }
 
-const FIXTURE = process.env.FIXTURE ?? 'fixtures/visible.json';
+/** What `pnpm analyse` writes. See docs/EVALUATION-CONTRACT.md. */
+interface AnalyseOutput {
+  findings: ScoredFinding[];
+  clusters?: Record<string, string>;
+}
+
+const FIXTURE = process.env.FIXTURE ?? 'fixtures/log-analyser/visible.json';
+const OUTPUT = process.env.OUTPUT ?? 'out/findings.json';
 
 async function main() {
   if (!existsSync(FIXTURE)) {
-    console.error(`\n  No fixture at ${FIXTURE}.`);
-    console.error('  Fixtures are issued with your brief. Run `pnpm fixtures` to fetch yours.\n');
+    console.error(`\n  No fixture at ${FIXTURE}.\n`);
+    process.exit(1);
+  }
+  if (!existsSync(OUTPUT)) {
+    console.error(`\n  No output at ${OUTPUT}. Run this first:\n`);
+    console.error('  pnpm analyse --input fixtures/log-analyser/visible.log --out out/findings.json\n');
     process.exit(1);
   }
 
@@ -40,11 +51,11 @@ async function main() {
   const fixture: Fixture = JSON.parse(raw);
   const checksum = createHash('sha256').update(raw).digest('hex').slice(0, 16);
 
-  // TODO(squad): import your pipeline here and produce findings from the
-  // fixture. Until then this reports zero, which is correct: you have not
-  // written stage 3 yet.
-  const findings: ScoredFinding[] = [];
-  const assigned = new Map<string, string>();
+  // The same file the hidden run scores. Nothing here re-runs your pipeline,
+  // so what you score is exactly what you would submit.
+  const output: AnalyseOutput = JSON.parse(await readFile(OUTPUT, 'utf8'));
+  const findings = output.findings ?? [];
+  const assigned = new Map(Object.entries(output.clusters ?? {}));
 
   const top = scoreTopK(findings, fixture.episodes, 5);
 
@@ -81,7 +92,7 @@ async function main() {
   console.log(`  ${allPass ? 'PASS' : 'NOT YET'} against the frozen thresholds for this fixture.`);
   console.log('');
   if (findings.length === 0) {
-    console.log('  Zero because stage 3 returns nothing yet. That is src/stages/3-detect/.\n');
+    console.log('  Zero because your output has no findings yet. Stage 3 is src/stages/3-detect/.\n');
   }
   // Exit non-zero when short, so this can gate anything later without a rewrite.
   if (!allPass) process.exitCode = 1;
